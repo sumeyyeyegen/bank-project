@@ -1,9 +1,14 @@
 html,
-body {
+body,
+.main,
+#__next,
+.app-container {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  min-height: 100%;
+  height: 100%;
 }
 
 a {
@@ -15,10 +20,16 @@ a {
   box-sizing: border-box;
 }
 
+button:focus {
+  outline: none;
+  font-size: 15px;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+
   body {
     color: white;
     background: black;
