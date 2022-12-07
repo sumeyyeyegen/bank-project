@@ -17,7 +17,7 @@ const AccordionComponent: FC<AccordionProps | any> = ({ bankItem }) => {
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Typography>{bankItem.bankName}</Typography>
+        <Typography>{bankItem.bank_name}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Typography>

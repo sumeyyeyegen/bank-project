@@ -8,10 +8,7 @@ export default function Nav() {
     const [user, setUser] = useState(null || Boolean);
 
     useEffect(() => {
-        console.log(authService.user.subscribe);
-
         const subscription = authService.user.subscribe(x => x?.status === "success" ? setUser(true) : setUser(false));
-        console.log(subscription);
 
 
         return () => subscription.unsubscribe();
