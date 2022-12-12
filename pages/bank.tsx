@@ -3,6 +3,10 @@ import AccordionComponent from '../components/Accordion'
 import Button from '@mui/material/Button';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
+import Modal from '../components/Modal';
+import useModal from '../helpers/hooks/useModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { setBankList } from '../redux/reducers/bankReducer';
 
 interface BankProps {
   bankName: string
@@ -30,28 +34,46 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   return {
     props: {
-      token: authorization,
-      token1: context.req.headers.cookie,
+      // token: authorization,
+      // token1: context.req.headers.cookie,
       allBankList: res.data.data
     }
   }
 }
 
 
-const Bank: FC<any> = ({ allBankList, token, token1 }) => {
+const Bank: FC<any> = ({ allBankList }) => {
+  const bankList = useSelector((state: any) => state.bank.bankList);
+
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setBankList(allBankList))
+  }, [allBankList])
+
+  useEffect(() => {
+    console.log(bankList);
+  }, [bankList])
+
+
+  const { isShowing, toggle } = useModal();
   return (
     <div className='card'>
       <div className="card-header d-flex justify-content-between align-items-center">
         <h3>Banka Listesi</h3>
-        <Button color="secondary" sx={{ backgroundColor: "#E5D1FF" }}>Banka Ekle</Button>
+        <Button color="secondary" sx={{ backgroundColor: "#E5D1FF" }} onClick={toggle}>Banka Ekle</Button>
       </div>
+      {
+        isShowing ? <Modal
+          hide={toggle} /> : null
+      }
       <div className="card-body">
         {
-          allBankList?.length > 0 ? allBankList.map((bank: any, idx: number) => {
+          bankList?.length > 0 ? bankList.map((bank: any, idx: number) => {
             return <AccordionComponent key={idx} bankItem={bank} />
           }) : <div>Herhangi bir banka bulunmamaktadır.</div>
         }
-
       </div>
 
 

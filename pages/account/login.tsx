@@ -67,8 +67,12 @@ function Login() {
             <div className="card">
               <div className="card-body">
                 <Form >
-                  <FormItem errors={errors.username} isValid={isValid} touched={touched.username} formik={formik.errors.username} type="username" values={values.username} handleChange={handleChange} />
-                  <FormItem errors={errors.password} isValid={isValid} touched={touched.password} formik={formik.errors.password} type="password" values={values.password} handleChange={handleChange} />
+                  <div className="form-group">
+                    <FormItem errors={errors.username} isValid={isValid} touched={touched.username} formik={formik.errors.username} type="username" values={values.username} handleChange={handleChange} text="Kullanıcı Adı" />
+                  </div>
+                  <div className="form-group">
+                    <FormItem errors={errors.password} isValid={isValid} touched={touched.password} formik={formik.errors.password} type="password" values={values.password} handleChange={handleChange} text="Şifre" />
+                  </div>
 
                   <div className={`invalid-feedback ${errors.apiError?.message !== undefined && "d-block"}`}>
                     {errors?.apiError?.message !== undefined ? <>{errors.apiError?.message}</> : null}</div>

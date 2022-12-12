@@ -10,16 +10,17 @@ interface formItemPropTypes {
   formik: String | undefined,
   type: String,
   handleChange: Function,
-  values: String | undefined
+  values: String | undefined,
+  text: String
 }
 
 export { FormItem };
 
-const FormItem = ({ errors, isValid, touched, formik, type, handleChange, values }:
+const FormItem = ({ errors, isValid, touched, formik, type, handleChange, values, text }:
   formItemPropTypes) => {
-  return <div className="form-group">
-    <label className='text-capitalize' htmlFor={`${type}`}>{type}</label>
-    <Field id={`${type}`} type="text" className={`form-control ${errors ? 'is-invalid' : ''}`} onChange={handleChange}
+  return <div>
+    <label className='text-capitalize' htmlFor={`${type}`}>{text}</label>
+    <Field id={`${type}`} type="text" className={`form-control p-0 m-0 ${errors ? 'is-invalid' : ''}`} onChange={handleChange}
       value={values} />
     <div className={`invalid-feedback ${isValid !== true && touched && "d-block"}`}>{isValid !== true && touched ? <div>{formik}</div> : null}</div>
   </div>

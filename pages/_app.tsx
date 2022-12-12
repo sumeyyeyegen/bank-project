@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import RouteGuard from '../components/RouteGuard';
 import { Nav } from '../components';
 import Head from 'next/head';
+import { Provider } from 'react-redux';
+import store from '../redux/store'
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -45,7 +47,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Nav />
       <div className="container pt-4 pb-4">
         <RouteGuard>
-          <Component {...pageProps} />
+          <Provider store={store}>
+            <Component {...pageProps} />
+          </Provider>
         </RouteGuard>
       </div>
     </div>
