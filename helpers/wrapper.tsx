@@ -1,55 +1,49 @@
-import Router from "next/router";
-import { authService } from "../services/auth";
-import { Middleware } from "./middleware";
-import axios from 'axios'
+import axios from 'axios';
+import { responseHandler } from './api';
 
 export const fetchWrapper = {
   get,
   post,
-  //   put,
-}
+  put
+  // delete: _delete
+};
 
-interface Values {
-  username: string,
-  password: string
-}
-
-async function get(url: string) {
+function get(url: string, token: string) {
   const requestOptions: Object = {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json', ...authHeader()
-    }
+    headers: { 'Content-Type': 'application/json', "Authorization": token },
+    url: `${url}`,
+    credentials: 'include'
   };
-  return new Promise((success, reject) => {
-    axios(url, requestOptions).then(function (response) {
-      return success(response?.data.data)
-    })
-      .catch(function (error) {
-        reject(error.data)
-      })
-  })
-
-
-  // await axios(url, requestOptions).then((res: any) => res.data.data);
+  return axios(requestOptions).then(responseHandler);
 }
 
-async function post(url: string | any, data: Values) {
+function post(url: string, token: string | undefined, body: object) {
+  let header = token !== undefined ? {
+    'Content-Type': 'application/json',
+    "Authorization": token
+  } : { 'Content-Type': 'application/json' }
+
   const requestOptions: Object = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...authHeader() },
-    body: JSON.stringify(data)
+    headers: header,
+    url: url,
+    credentials: 'include',
+    data: body
   };
-  return await fetch(url, requestOptions).then(res => Middleware.handleResponse(res));
+  return axios(requestOptions).then(responseHandler);
 }
 
-function authHeader() {
-  const user: any = authService.userValue;
-  const isLoggedIn = user && user._value.data;
-
-  if (isLoggedIn) {
-    return { Authorization: user._value.data };
-  } else {
-    return {};
-  }
+function put(url: string, token: string | undefined, body: object) {
+  let header = token !== undefined ? {
+    'Content-Type': 'application/json',
+    "Authorization": token
+  } : { 'Content-Type': 'application/json' }
+  const requestOptions: Object = {
+    method: 'PUT',
+    headers: header,
+    body: JSON.stringify(body),
+    url: url
+  };
+  return axios(requestOptions).then(responseHandler);
 }

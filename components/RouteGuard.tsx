@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { authService } from '../services/auth';
+import { authService } from '../services';
+
+export { RouteGuard };
 
 export default function RouteGuard({ children }: any) {
     const router = useRouter();
@@ -35,8 +37,8 @@ export default function RouteGuard({ children }: any) {
         if (!authService.user && !publicPaths.includes(path)) {
             setAuthorized(false);
             router.push({
-                pathname: '/account/login'
-                // query: { returnUrl: router.asPath }
+                pathname: '/account/login',
+                query: { returnUrl: router.asPath }
             });
         } else {
             setAuthorized(true);

@@ -1,17 +1,23 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
-import styles from '../styles/Home.module.css'
-
-
+import { useRouter } from "next/router";
+import { useEffect } from "react"
+import { authService } from "../services";
 
 export default function Home() {
-
   const router = useRouter();
-  
+
+
+  useEffect(() => {
+    let control = authService.userValue.getValue();
+    if (control === false || control === null) {
+      router.push('/account/login');
+    }
+  }, [])
 
   return (
-    <div className={styles.container}>
+    <div className="card mt-4">
+      <div className="card-body">
+
+      </div>
     </div>
   )
 }

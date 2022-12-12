@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import AccordionComponent from '../components/Accordion'
 import Button from '@mui/material/Button';
-import { fetchWrapper } from '../helpers/wrapper';
 import { GetServerSideProps } from 'next';
+import axios from 'axios';
 
 interface BankProps {
   bankName: string
@@ -12,36 +12,33 @@ interface BanksProps {
   arr: BankProps[];
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
-  // var allBanks: any = [];
-  // fetchWrapper.get(`http://localhost:81/api/banks`).then((res: any) => allBanks.push(...res))
+  const authorization = context.req.headers.cookie?.split("=")[1];
 
-  const res = await fetch('http://localhost:81/api/banks',
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json', "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NzA0NDkzMDksImxldmVsIjoxLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicHJveG9sYWIifQ.nLnn3tDO3owt2zn2LLyxe7evi6uxmx5wZCIuxS4Rg1s"
-      }
+  // const authorization = Cookies.get("token");
+  const requestOptions: Object = {
+    method: 'GET',
+    url: "http://localhost:81/api/banks",
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": authorization
     }
-  );
-  var allBanks = await res.json();
+  };
 
-
-  // res.map((item: any) => allBanks.push(item.bank_name))
-  // allBanks = await allBanks.length > 0 ? allBanks.map((item: any) => item?.bank_name) : [{ bank_name: "İş" }]
-  // console.log(allBanks);
-
+  const res: any = await axios(requestOptions).then((res: any) => res).catch(err => err)
 
   return {
     props: {
-      allBankList: allBanks.data
+      token: authorization,
+      token1: context.req.headers.cookie,
+      allBankList: res.data.data
     }
   }
 }
 
-const Bank: FC<BanksProps | any> = ({ allBankList }) => {
 
+const Bank: FC<any> = ({ allBankList, token, token1 }) => {
   return (
     <div className='card'>
       <div className="card-header d-flex justify-content-between align-items-center">
@@ -49,13 +46,10 @@ const Bank: FC<BanksProps | any> = ({ allBankList }) => {
         <Button color="secondary" sx={{ backgroundColor: "#E5D1FF" }}>Banka Ekle</Button>
       </div>
       <div className="card-body">
-        {/* {console.log(allBankList)}
-        {console.log(fetchWrapper.get(`http://localhost:81/api/banks`).then(res => console.log(res)))} */}
-
         {
-          allBankList.length > 0 ? allBankList.map((bank: any, idx: number) => {
+          allBankList?.length > 0 ? allBankList.map((bank: any, idx: number) => {
             return <AccordionComponent key={idx} bankItem={bank} />
-          }) : ""
+          }) : <div>Herhangi bir banka bulunmamaktadır.</div>
         }
 
       </div>
