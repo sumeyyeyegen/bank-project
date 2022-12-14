@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import AccordionComponent from '../components/Accordion'
+import AccordionComponent from '../components/Accordion/Accordion'
 import Button from '@mui/material/Button';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
@@ -71,6 +71,7 @@ const Bank: FC<any> = ({ allBankList }) => {
       <div className="card-body">
         {
           bankList?.length > 0 ? bankList.map((bank: any, idx: number) => {
+            console.log(bank)
             return <AccordionComponent key={idx} bankItem={bank} />
           }) : <div>Herhangi bir banka bulunmamaktadır.</div>
         }
