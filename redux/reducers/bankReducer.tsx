@@ -1,4 +1,3 @@
-//https://api.varmi.com.tr/api/v2/faq
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'

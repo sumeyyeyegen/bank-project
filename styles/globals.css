@@ -37,3 +37,8 @@ a:hover {
     background: black;
   }
 }
+
+.container-personal {
+  margin-left: 8em;
+  margin-right: 8em;
+}

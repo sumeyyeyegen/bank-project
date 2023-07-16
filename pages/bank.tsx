@@ -70,10 +70,7 @@ const Bank: FC<any> = ({ allBankList }) => {
       }
       <div className="card-body">
         {
-          bankList?.length > 0 ? bankList.map((bank: any, idx: number) => {
-            console.log(bank)
-            return <AccordionComponent key={idx} bankItem={bank} />
-          }) : <div>Herhangi bir banka bulunmamaktadır.</div>
+          bankList.length > 0 ? <AccordionComponent /> : <div>Herhangi bir banka bulunmamaktadır.</div>
         }
       </div>
 

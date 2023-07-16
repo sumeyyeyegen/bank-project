@@ -5,22 +5,25 @@ import { useForm } from 'react-hook-form'
 import { fetchWrapper } from '../helpers'
 import Alert from '../helpers/Alert'
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setFilteredBankInterests } from '../redux/reducers/AccordionReducer'
 
 interface PropTypes {
-  setFilteredBankInterests: any,
-  filteredBankInterests: any,
   bankId: any,
-  bankName: String
+  bankName: String,
+  decrement: Function,
+  index: number
 }
 
-const InterestAddRow = ({ filteredBankInterests, setFilteredBankInterests, bankId, bankName }: PropTypes) => {
+const InterestAddRow = ({ bankId, bankName, decrement, index }: PropTypes) => {
+  const dispatch = useDispatch();
+  const filteredBankInterests = useSelector((state: any) => state.accordion.filteredBankInterests)
   const [interestRate, setInterestRate] = useState()
   const [selectedType, setSelectedType] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [updatedOption, setUpdatedOption] = useState([]);
 
-  const [interestAddRes, setInterestAddRes] = useState()
+  const [interestAddRes, setInterestAddRes] = useState<any>()
 
   const [filteredOptionList, setFilteredOptionList] = useState({ id: "", type: "", options: [] })
 
@@ -76,7 +79,7 @@ const InterestAddRow = ({ filteredBankInterests, setFilteredBankInterests, bankI
     let token = Cookies.get("token");
 
     fetchWrapper.post("http://localhost:81/api/interests", token, allData).then(res => {
-      setFilteredBankInterests([...filteredBankInterests, res.data.data])
+      dispatch(setFilteredBankInterests([...filteredBankInterests, res.data.data]))
       // dispatch(setBankList([...bankList, res.data.data]))
       setInterestAddRes(res.data)
     }).catch(err => {
@@ -210,13 +213,16 @@ const InterestAddRow = ({ filteredBankInterests, setFilteredBankInterests, bankI
             />
           </FormControl>
         </div>
-        <div className="col-12 col-sm-3">
+        <div className="col-12 col-sm-3 d-flex">
           <FormControl fullWidth>
-            <Button variant="outlined" type='submit' sx={{ padding: "15px" }}>Kaydet</Button>
+            <Button variant="outlined" type='submit' sx={{ padding: "15px", marginRight: "5px" }}>Kaydet</Button>
+          </FormControl>
+          <FormControl fullWidth>
+            <Button variant="outlined" type='button' color='error' sx={{ padding: "15px" }} onClick={() => decrement(index)}>Sil</Button>
           </FormControl>
         </div>
       </div>
-    </form>
+    </form >
   )
 }
 

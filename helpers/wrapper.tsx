@@ -4,8 +4,8 @@ import { responseHandler } from './api';
 export const fetchWrapper = {
   get,
   post,
-  put
-  // delete: _delete
+  put,
+  delete: deleteReq
 };
 
 function get(url: string, token: string) {
@@ -43,6 +43,22 @@ function put(url: string, token: string | undefined, body: object) {
     method: 'PUT',
     headers: header,
     body: JSON.stringify(body),
+    url: url
+  };
+  return axios(requestOptions).then(responseHandler);
+}
+
+function deleteReq(url: string, token: string | undefined, body: object) {
+  let header = token !== undefined ? {
+    'Content-Type': 'application/json',
+    "Authorization": token
+  } : { 'Content-Type': 'application/json' }
+  let jsonData = JSON.stringify(body);
+
+  const requestOptions: Object = {
+    method: 'DELETE',
+    headers: header,
+    data: body,
     url: url
   };
   return axios(requestOptions).then(responseHandler);
